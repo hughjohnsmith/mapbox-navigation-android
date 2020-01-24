@@ -8,4 +8,6 @@ interface RouteObserver {
     fun onRoutesRequested()
 
     fun onRoutesRequestFailure(throwable: Throwable)
+
+    fun onRoutesRequestCanceled()
 }

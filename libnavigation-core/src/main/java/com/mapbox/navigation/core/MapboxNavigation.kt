@@ -34,8 +34,8 @@ import com.mapbox.navigation.trip.notification.NotificationAction
 import com.mapbox.navigation.utils.thread.JobControl
 import com.mapbox.navigation.utils.thread.ThreadController
 import com.mapbox.navigation.utils.thread.monitorChannelWithException
-import java.lang.reflect.Field
 import kotlinx.coroutines.channels.ReceiveChannel
+import java.lang.reflect.Field
 
 class MapboxNavigation(
     private val context: Context,
@@ -101,6 +101,17 @@ class MapboxNavigation(
 
     fun requestRoutes(routeOptions: RouteOptions) {
         directionsSession.requestRoutes(routeOptions)
+    }
+
+    /**
+     * Set a list of routes. If the list is empty, the SDK will exit the `Active Guidance` state
+     * If the list is not empty, the route at index 0 is going to be treated as the primary route
+     * and used for route progress, off route events and map-matching calculations.
+     *
+     * @param routes a list of [DirectionsRoute]s
+     */
+    fun setRoutes(routes: List<DirectionsRoute>) {
+        directionsSession.routes = routes
     }
 
     fun onDestroy() {
@@ -202,6 +213,10 @@ class MapboxNavigation(
                     tripSession.unregisterOffRouteObserver(this)
                 }
             })*/
+        }
+
+        override fun onRoutesRequestCanceled() {
+            // do nothing
         }
     }
 

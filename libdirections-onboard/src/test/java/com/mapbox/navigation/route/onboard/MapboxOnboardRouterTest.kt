@@ -81,6 +81,16 @@ class MapboxOnboardRouterTest {
     }
 
     @Test
+    fun checkCallbackCalledOnCancel() = coroutineRule.runBlockingTest {
+        every { navigator.getRoute(any()) } returns routerResultSuccess
+
+        onboardRouter.getRoute(routerOptions, routerCallback)
+
+        verify { navigator.getRoute(URL) }
+        verify { routerCallback.onResponse(any()) }
+    }
+
+    @Test
     fun checkModelOnSuccess() = coroutineRule.runBlockingTest {
         val routesSlot = slot<List<DirectionsRoute>>()
         every { navigator.getRoute(any()) } returns routerResultSuccess

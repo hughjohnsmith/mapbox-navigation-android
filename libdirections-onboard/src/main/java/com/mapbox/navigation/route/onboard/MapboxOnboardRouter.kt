@@ -20,10 +20,11 @@ import com.mapbox.navigation.utils.exceptions.NavigationException
 import com.mapbox.navigation.utils.thread.ThreadController
 import com.mapbox.navigator.RouterParams
 import com.mapbox.navigator.TileEndpointConfiguration
-import java.io.File
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 
 @MapboxNavigationModule(MapboxNavigationModuleType.OnboardRouter, skipConfiguration = true)
 class MapboxOnboardRouter : Router {
@@ -127,6 +128,7 @@ class MapboxOnboardRouter : Router {
             }
 
             when {
+                !isActive -> callback.onCanceled()
                 !routes.isNullOrEmpty() -> callback.onResponse(routes)
                 else -> callback.onFailure(NavigationException(generateErrorMessage(routerResult.json)))
             }

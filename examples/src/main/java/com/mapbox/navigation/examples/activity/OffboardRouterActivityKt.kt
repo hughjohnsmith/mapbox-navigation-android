@@ -2,6 +2,7 @@ package com.mapbox.navigation.examples.activity
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
@@ -146,6 +147,7 @@ class OffboardRouterActivityKt : AppCompatActivity(),
             }.build()
 
             offboardRouter?.getRoute(options, this@OffboardRouterActivityKt)
+            Handler().postDelayed({offboardRouter?.cancel()}, 50)
         }
     }
 
@@ -163,6 +165,10 @@ class OffboardRouterActivityKt : AppCompatActivity(),
     override fun onFailure(throwable: Throwable) {
         Toast.makeText(this, "Error: " + throwable.message, Toast.LENGTH_LONG).show()
         MapboxLogger.e(Message("Router.Callback#onFailure"), throwable)
+    }
+
+    override fun onCanceled() {
+        Toast.makeText(this, "Canceled", Toast.LENGTH_LONG).show()
     }
 
     /*

@@ -49,7 +49,11 @@ class MapboxOffboardRouter(
             }
 
             override fun onFailure(call: Call<DirectionsResponse>, t: Throwable) {
-                callback.onFailure(t)
+                if (call.isCanceled) {
+                    callback.onCanceled()
+                } else {
+                    callback.onFailure(t)
+                }
             }
         })
     }

@@ -108,7 +108,9 @@ class SimpleMapboxNavigationKt : AppCompatActivity(), OnMapReadyCallback {
 
     private val routeObserver = object : RouteObserver {
         override fun onRoutesChanged(routes: List<DirectionsRoute>) {
-            navigationMapRoute?.addRoute(routes[0])
+            if (routes.isNotEmpty()) {
+                navigationMapRoute?.addRoute(routes[0])
+            }
             Timber.e("route changed %s", routes.toString())
         }
 
@@ -119,6 +121,11 @@ class SimpleMapboxNavigationKt : AppCompatActivity(), OnMapReadyCallback {
         override fun onRoutesRequestFailure(throwable: Throwable) {
             symbolManager?.deleteAll()
             Timber.e("route request failure %s", throwable.toString())
+        }
+
+        override fun onRoutesRequestCanceled() {
+            symbolManager?.deleteAll()
+            Timber.e("route request canceled")
         }
     }
 

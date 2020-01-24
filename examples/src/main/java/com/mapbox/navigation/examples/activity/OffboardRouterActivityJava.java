@@ -37,6 +37,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 import static com.mapbox.navigation.base.extensions.MapboxRouteOptionsUtils.applyDefaultParams;
 import static com.mapbox.navigation.base.extensions.MapboxRouteOptionsUtils.coordinates;
@@ -163,6 +164,11 @@ public class OffboardRouterActivityJava extends AppCompatActivity implements
   public void onFailure(@NotNull Throwable throwable) {
     Toast.makeText(this, "Error: " + throwable.getMessage(), Toast.LENGTH_LONG).show();
     MapboxLogger.INSTANCE.e(new Message("Router.Callback#onFailure"), throwable);
+  }
+
+  @Override
+  public void onCanceled() {
+    Timber.e("onRoutesRequestCanceled");
   }
 
   /*
